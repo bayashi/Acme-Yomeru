@@ -8,8 +8,11 @@ my $builder = Module::Build->new(
     dist_author         => 'Dai Okabayashi <bayashi@cpan.org>',
     dist_version_from   => 'lib/Acme/Yomeru.pm',
     requires => {
-        'Test::More' => 0,
-        'Carp'       => 0,
+        'Test::More'  => 0,
+        'Carp'        => 0,
+        'Moose'       => 0,
+        'Text::MeCab' => 0,
+        'Encode'      => 0,
     },
     add_to_cleanup      => [ 'Acme-Yomeru-*' ],
 );

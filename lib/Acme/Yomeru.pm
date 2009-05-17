@@ -1,20 +1,110 @@
 package Acme::Yomeru;
 
-use warnings;
-use strict;
-use Carp;
+use Moose;
+use utf8;
+use Carp qw(croak);
+#use UNIVERSAL::require;
 
-use version; our $VERSION = qv('0.0.1');
+use Text::MeCab;
+use Encode qw(decode_utf8);
 
-# Other recommended modules (uncomment to use):
-#  use IO::Prompt;
-#  use Perl6::Export;
-#  use Perl6::Slurp;
-#  use Perl6::Say;
+our $VERSION = '0.0.2';
 
+has 'text' => (
+    is       => 'rw',
+    isa      => 'Str',
+    required => 1,
+);
 
-# Module implementation here
+#has 'parser' => (
+#    is      => 'rw',
+#    isa     => 'Str',
+#    default => __PACKAGE__ . '::Parser::TextMeCab',
+#);
 
+__PACKAGE__->meta->make_immutable;
+
+no Moose;
+
+sub convert {
+    my $self = shift;
+
+    croak 'text is blank!' unless $self->text;
+
+    # load parser
+    #my $module = $self->parser;
+    #$module->require or croak 'can not load' . $module;
+
+    return $self->_randomize($self->_smoothing->_parse_text);
+}
+
+sub _smoothing {
+    my $self = shift;
+
+    my $text = $self->text;
+
+    $text =~ tr/[０-９]/[0-9]/;
+
+    $self->text($text);
+
+    $self;
+}
+
+sub _parse_text {
+    my $self = shift;
+
+    my $parsed_text;
+
+    my $mecab = Text::MeCab->new;
+
+    for (my $node = $mecab->parse($self->text); $node; $node = $node->next) {
+
+        my $surface = decode_utf8($node->surface);
+        next unless $surface;
+        my $feature = decode_utf8($node->feature);
+        my ($type, $yomi) = ( split /,/, $feature )[0, 7];
+        $parsed_text .= $yomi ? "$yomi " : "$surface ";
+
+    }
+
+    $parsed_text =~ tr/ァ-ン/ぁ-ん/;
+
+    return $parsed_text;
+}
+
+sub _randomize {
+    my $self        = shift;
+    my $parsed_text = shift;
+
+    srand(length $parsed_text);
+
+    my $randomized;
+    for my $text ( split / /, $parsed_text ) {
+        if ($text =~ /^[ぁ-ん]+$/ && $text =~ m!^(.)(..+)(.)$!) {
+            $randomized .=
+                $1 . join('', $self->_shuffle(split //, $2)) . $3 . ' ';
+        }
+        else {
+            $randomized .= $text . ' ';
+        }
+    }
+    $randomized =~ s/\s+$//;
+
+    return $randomized;
+}
+
+sub _shuffle {
+    my $self  = shift;
+    my @array = @_;
+
+    my $i;
+    for ($i = @array; --$i; ) {
+        my $j = int( rand($i+1) );
+        next if $i == $j;
+        @array[$i,$j] = @array[$j,$i];
+    }
+    return @array;
+}
 
 1;
 
@@ -23,13 +113,20 @@ __END__
 
 =head1 NAME
 
-Acme::Yomeru - [One line description]
+Acme::Yomeru - Japanese Texts are Converted into Mysterious Texts.
 
 
 =head1 SYNOPSIS
 
+    use utf8;
     use Acme::Yomeru;
 
+    my $yomeru = Acme::Yomeru->new(
+        text => 'これは、奇妙な日本語フィルタだよ。',
+    );
+
+    print $yomeru->convert;
+    
 
 =head1 METHOD
 
@@ -37,11 +134,11 @@ Acme::Yomeru - [One line description]
 
 =item new(I<$arg>)
 
-constructor
+constructor. required text(utf-8 flag on).
 
-=item method_name
+=item convert
 
-description of method
+convert text into Mysterious Texts.
 
 =back
 
