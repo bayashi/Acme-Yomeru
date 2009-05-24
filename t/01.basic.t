@@ -1,13 +1,15 @@
-use Test::More tests => 5;
+use Test::More tests => 7;
 
 use utf8;
 
+use Acme::Yomeru::Parser::TextMeCab;
+
 BEGIN {
-use_ok( 'Acme::Yomeru' );
+    use_ok( 'Acme::Yomeru' );
 }
 
 my $yomeru = Acme::Yomeru->new(
-   text => 'これは、奇妙な日本語フィルタだよ。',
+    text   => 'これは、奇妙な日本語フィルタだよ。',
 );
 
 {
@@ -20,18 +22,29 @@ my $yomeru = Acme::Yomeru->new(
         'get text';
 }
 
-
-#is $yomeru->parser, 'Acme::Yomeru::Parser::YahooAPI', 'parser';
+{
+    like $yomeru->parser,
+        qr/Acme::Yomeru::Parser::TextMeCab/,
+        'parser';
+}
 
 {
-    is $yomeru->convert,
+    is $yomeru->cambridgize,
         'これ は 、 きょみう な にほんご ふるぃた だ よ 。',
-        'convert';
+        'cambridgize';
 }
 
 {
     $yomeru->text('');
 
-    eval { $yomeru->convert; };
-    like($@, qr/text is blank!/, 'no text');
+    eval { $yomeru->cambridgize; };
+    like $@, qr/text is blank!/, 'no text';
+}
+
+    $yomeru->text('テスト');
+
+{
+    is $yomeru->text,
+        'テスト',
+        'get text again';
 }
