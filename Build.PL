@@ -9,15 +9,22 @@ my $builder = Module::Build->new(
     repository        => 'http://github.com/bayashi/Acme-Yomeru/tree',
     dist_version_from => 'lib/Acme/Yomeru.pm',
     requires => {
-        'Test::More'  => 0,
-        'Carp'        => 0,
         'Moose'       => 0,
         'Moose::Role' => 0,
+        'Carp'        => 0,
+        # for Acme::Yomeru::Parser::TextMeCab
         'Text::MeCab' => 0,
         'Encode'      => 0,
+    },
+    recommends => {
+        # for Acme::Yomeru::Parser::YahooAPI
         'URI'         => 0,
         'LWP::Simple' => 0,
         'XML::Simple' => 0,
+    },
+    build_requires => {
+        'Module::Build' => 0,
+        'Test::More'    => 0,
     },
     add_to_cleanup    => [ 'Acme-Yomeru-*' ],
 );

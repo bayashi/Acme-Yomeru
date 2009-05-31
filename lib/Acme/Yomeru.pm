@@ -94,7 +94,7 @@ Acme::Yomeru - Japanese Texts are Converted into Mysterious Texts.
     use utf8;
 
     use Acme::Yomeru;
-    use Acme::Yomeru::Parser::TextMeCab; # Default
+    use Acme::Yomeru::Parser::TextMeCab;
 
     my $yomeru = Acme::Yomeru->new(
         text => 'これは、奇妙な日本語フィルタだよ。',
