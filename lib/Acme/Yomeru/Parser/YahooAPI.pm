@@ -1,5 +1,4 @@
 package Acme::Yomeru::Parser::YahooAPI;
-use Moose;
 use utf8;
 
 use Carp qw(croak);
@@ -8,6 +7,8 @@ use URI;
 use LWP::Simple;
 use XML::Simple;
 use Encode qw(encode_utf8 decode_utf8);
+
+use Moose;
 
 with 'Acme::Yomeru::Parser';
 
@@ -23,7 +24,7 @@ no Moose;
 
 sub parse {
     my $self = shift;
-    my $text = shift;
+    my $obj  = shift;
 
     croak 'api_key is blank!' if $self->api_key eq '';
 
@@ -31,7 +32,7 @@ sub parse {
 
     $uri->query_form(
         appid    => $self->api_key,
-        sentence => encode_utf8($text),
+        sentence => encode_utf8($obj->text),
     );
 
     my $node_list = XMLin( get($uri) )->{ma_result}{word_list}{word};
@@ -49,7 +50,9 @@ sub parse {
 
     $parsed_text =~ tr/ァ-ン/ぁ-ん/;
 
-    return $parsed_text;
+    $obj->_convert_text($parsed_text);
+
+    return $obj;
 }
 
 1;

@@ -1,15 +1,20 @@
 package Acme::Yomeru;
-use Moose;
 use utf8;
 
 use Carp qw(croak);
 
-our $VERSION = '0.0.3';
+our $VERSION = '0.0.4';
 
+use Moose;
 has 'text' => (
     is       => 'rw',
     isa      => 'Str',
     required => 1,
+);
+
+has '_convert_text' => (
+    is  => 'rw',
+    isa => 'Str',
 );
 
 has 'parser' => (
@@ -20,6 +25,14 @@ has 'parser' => (
     handles  => [ 'parse' ]
 );
 
+before 'cambridgize' => sub {
+    my $self = shift;
+    my $text = $self->text;
+    $text =~ tr/[０-９]/[0-9]/;
+    $self->_convert_text($text);
+    return $self;
+};
+
 __PACKAGE__->meta->make_immutable;
 
 no Moose;
@@ -29,19 +42,16 @@ sub cambridgize {
 
     croak 'text is blank!' if $self->text eq '';
 
-    $self->_randomize( $self->parse($self->_smoothing) );
+    $self->parse($self)->_randomize;
+
 }
 
-sub _smoothing {
-    my $self = shift;
-    my $text = $self->text;
-    $text =~ tr/[０-９]/[0-9]/;
-    return $text;
-}
+
 
 sub _randomize {
     my $self        = shift;
-    my $parsed_text = shift;
+
+    my $parsed_text = $self->_convert_text;
 
     srand(length $parsed_text);
 

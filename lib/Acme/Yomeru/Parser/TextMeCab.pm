@@ -1,9 +1,10 @@
 package Acme::Yomeru::Parser::TextMeCab;
-use Moose;
 use utf8;
 
 use Text::MeCab;
 use Encode qw(decode_utf8);
+
+use Moose;
 
 with 'Acme::Yomeru::Parser';
 
@@ -13,10 +14,10 @@ no Moose;
 
 sub parse {
     my $self = shift;
-    my $text = shift;
+    my $obj  = shift;
 
     my $parsed_text;
-
+    my $text  = $obj->text;
     my $mecab = Text::MeCab->new;
 
     for (my $node = $mecab->parse($text); $node; $node = $node->next) {
@@ -30,7 +31,10 @@ sub parse {
 
     $parsed_text =~ tr/ァ-ン/ぁ-ん/;
 
-    return $parsed_text;
+    $obj->_convert_text($parsed_text);
+
+    return $obj;
+
 }
 
 1;
