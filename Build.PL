@@ -12,11 +12,11 @@ my $builder = Module::Build->new(
         'Moose'       => 0,
         'Moose::Role' => 0,
         'Carp'        => 0,
+
         # for Acme::Yomeru::Parser::TextMeCab
         'Text::MeCab' => 0,
         'Encode'      => 0,
-    },
-    recommends => {
+
         # for Acme::Yomeru::Parser::YahooAPI
         'URI'         => 0,
         'LWP::Simple' => 0,

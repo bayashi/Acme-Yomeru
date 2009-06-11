@@ -1,4 +1,5 @@
 package Acme::Yomeru::Parser;
+
 use Moose::Role;
 
 requires 'parse';

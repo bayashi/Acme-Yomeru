@@ -9,3 +9,4 @@ lib/Acme/Yomeru/Parser/TextMeCab.pm
 lib/Acme/Yomeru/Parser/YahooAPI.pm
 t/00.load.t
 t/01.basic.t
+META.yml

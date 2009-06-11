@@ -26,8 +26,6 @@ sub parse {
     my $self = shift;
     my $obj  = shift;
 
-    croak 'api_key is blank!' if $self->api_key eq '';
-
     my $uri = URI->new('http://jlp.yahooapis.jp/MAService/V1/parse');
 
     $uri->query_form(
@@ -39,12 +37,15 @@ sub parse {
 
     my $parsed_text;
 
+    if ( ref $node_list ne 'ARRAY' ) {
+        $node_list = [$node_list];
+    }
+
     for my $node ( @{ $node_list } ) {
 
         my $surface = decode_utf8($node->{surface});
         my $yomi    = decode_utf8($node->{reading});
-        next unless $surface;
-        $parsed_text .= $yomi ? "$yomi " : "$surface ";
+        $parsed_text .= "$yomi ";
 
     }
 

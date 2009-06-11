@@ -3,9 +3,10 @@ use utf8;
 
 use Carp qw(croak);
 
-our $VERSION = '0.0.4';
-
 use Moose;
+
+our $VERSION = '0.0.5';
+
 has 'text' => (
     is       => 'rw',
     isa      => 'Str',
@@ -108,6 +109,19 @@ Acme::Yomeru - Japanese Texts are Converted into Mysterious Texts.
 
     my $yomeru = Acme::Yomeru->new(
         text => 'これは、奇妙な日本語フィルタだよ。',
+    );
+
+    print $yomeru->cambridgize;
+
+or if you did not have MeCab, you can use Yahoo API.
+
+    use Acme::Yomeru::Parser::YahooAPI;
+
+    my $yomeru = Acme::Yomeru->new(
+        text   => 'これは、奇妙な日本語フィルタだよ。',
+        parser => Acme::Yomeru::Parser::YahooAPI->new(
+            api_key => 'YOUR_APPID',
+        ),
     );
 
     print $yomeru->cambridgize;
