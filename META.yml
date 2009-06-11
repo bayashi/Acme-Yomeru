@@ -1,0 +1,36 @@
+---
+name: Acme-Yomeru
+version: 0.0.5
+author:
+  - 'Dai Okabayashi <bayashi@cpan.org>'
+abstract: Japanese Texts are Converted into Mysterious Texts.
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
+requires:
+  Carp: 0
+  Encode: 0
+  Moose: 0
+  Moose::Role: 0
+  Text::MeCab: 0
+build_requires:
+  Module::Build: 0
+  Test::More: 0
+recommends:
+  LWP::Simple: 0
+  URI: 0
+  XML::Simple: 0
+provides:
+  Acme::Yomeru:
+    file: lib/Acme/Yomeru.pm
+    version: 0.0.5
+  Acme::Yomeru::Parser:
+    file: lib/Acme/Yomeru/Parser.pm
+  Acme::Yomeru::Parser::TextMeCab:
+    file: lib/Acme/Yomeru/Parser/TextMeCab.pm
+  Acme::Yomeru::Parser::YahooAPI:
+    file: lib/Acme/Yomeru/Parser/YahooAPI.pm
+generated_by: Module::Build version 0.33
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
