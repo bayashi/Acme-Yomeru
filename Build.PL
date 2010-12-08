@@ -6,7 +6,6 @@ my $builder = Module::Build->new(
     module_name       => 'Acme::Yomeru',
     license           => 'perl',
     dist_author       => 'Dai Okabayashi <bayashi@cpan.org>',
-    repository        => 'http://github.com/bayashi/Acme-Yomeru/tree',
     dist_version_from => 'lib/Acme/Yomeru.pm',
     requires => {
         'Moose'       => 0,
@@ -27,6 +26,11 @@ my $builder = Module::Build->new(
         'Test::More'    => 0,
     },
     add_to_cleanup    => [ 'Acme-Yomeru-*' ],
+    meta_merge     => {
+      resources => {
+        repository  => 'git://github.com/bayashi/Acme-Yomeru.git'
+      }
+    },
 );
 
 $builder->create_build_script();

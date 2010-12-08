@@ -24,7 +24,9 @@ sub parse {
 
         my $surface = decode_utf8($node->surface);
         next unless $surface;
-        my $yomi = ( split /,/, decode_utf8($node->feature) )[7];
+        my @features = split /,/, decode_utf8($node->feature);
+        $parsed_text =~ s/\s$// if $features[0] =~ m!(?:助詞|助動詞)!;
+        my $yomi = $features[7];
         $parsed_text .= $yomi ? "$yomi " : "$surface ";
 
     }

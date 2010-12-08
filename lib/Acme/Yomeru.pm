@@ -47,8 +47,6 @@ sub cambridgize {
 
 }
 
-
-
 sub _randomize {
     my $self        = shift;
 
@@ -90,6 +88,7 @@ sub _shuffle_words {
 
 __END__
 
+=encoding UTF-8
 
 =head1 NAME
 
@@ -113,7 +112,7 @@ Acme::Yomeru - Japanese Texts are Converted into Mysterious Texts.
 
     print $yomeru->cambridgize;
 
-or if you did not have MeCab, you can use Yahoo API.
+or you can use Yahoo API.
 
     use Acme::Yomeru::Parser::YahooAPI;
 
@@ -140,6 +139,12 @@ constructor. required text(utf-8 flag on).
 convert text into Mysterious Texts.
 
 =back
+
+
+=head1 REPOSITORY
+
+C<Acme::Yomeru> is hosted on github
+at L<http://github.com/bayashi/Acme-Yomeru>
 
 
 =head1 AUTHOR

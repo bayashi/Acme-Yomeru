@@ -1,4 +1,4 @@
-use Test::More tests => 10;
+use Test::More 0.88;
 
 use utf8;
 
@@ -31,7 +31,7 @@ my $yomeru = Acme::Yomeru->new(
 
 {
     is $yomeru->cambridgize,
-        'これ は 、 きょみう な にほんご ふるぃた だ よ 。',
+        'これは 、 きょみうな にんほご ふるたぃだよ 。',
         'cambridgize';
 }
 
@@ -51,7 +51,7 @@ my $yomeru = Acme::Yomeru->new(
 }
 
 
-
+=pod
 my $yomeru_yahoo = Acme::Yomeru->new(
     text   => 'これは、奇妙な日本語フィルタだよ。',
     parser => Acme::Yomeru::Parser::YahooAPI->new(
@@ -78,3 +78,6 @@ my $yomeru_yahoo = Acme::Yomeru->new(
         'peace',
         'words can not read';
 }
+=cut
+
+done_testing;
